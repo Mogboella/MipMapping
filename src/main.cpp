@@ -18,8 +18,6 @@
 #include "model.h"
 #include "shaders.h"
 
-// TODO, make rotate
-
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -45,7 +43,8 @@ static int mode = 0;
 float lod = 0.0f;
 static int textureIndex = 0;
 
-int main() {
+int main()
+{
   if (!glfwInit())
     return -1;
 
@@ -60,7 +59,8 @@ int main() {
   GLFWwindow *window =
       glfwCreateWindow(width, height, project_name, nullptr, nullptr);
 
-  if (!window) {
+  if (!window)
+  {
     cerr << "Failed to create window\n";
     glfwTerminate();
     return -1;
@@ -74,7 +74,8 @@ int main() {
 
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+  {
     cerr << "Failed to initialize GLAD\n";
     return -1;
   }
@@ -99,22 +100,19 @@ int main() {
   // Load shaders
   Shader shader("shaders/main.vert", "shaders/main.frag");
 
-  // Load Texjpge
+  // Load Texjpg
   unsigned int chessTex =
       Model::loadTexture2D("assets/textures/chess_board.jpeg");
-  unsigned int uvGridTex = Model::loadTexture2D("assets/uvtex.jpeg");
-  unsigned int lineTex = Model::loadTexture2D("assets/moire.jpg");
-  unsigned int textures[] = {chessTex, uvGridTex, lineTex};
 
   // ---------- Floor plane geometry ----------
   float floorHalf = 100.0f; // 100x100 floor
   float uvRepeat = 50.0f;   // tile texture a lot to see mipmapping effects
 
   float floorVertices[] = {
-      -floorHalf, 0.0f, -floorHalf, 0.0f, 1.0f, 0.0f, 0.0f,     0.0f,
-      floorHalf,  0.0f, -floorHalf, 0.0f, 1.0f, 0.0f, uvRepeat, 0.0f,
-      floorHalf,  0.0f, floorHalf,  0.0f, 1.0f, 0.0f, uvRepeat, uvRepeat,
-      -floorHalf, 0.0f, floorHalf,  0.0f, 1.0f, 0.0f, 0.0f,     uvRepeat};
+      -floorHalf, 0.0f, -floorHalf, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+      floorHalf, 0.0f, -floorHalf, 0.0f, 1.0f, 0.0f, uvRepeat, 0.0f,
+      floorHalf, 0.0f, floorHalf, 0.0f, 1.0f, 0.0f, uvRepeat, uvRepeat,
+      -floorHalf, 0.0f, floorHalf, 0.0f, 1.0f, 0.0f, 0.0f, uvRepeat};
 
   unsigned int floorIndices[] = {0, 1, 2, 0, 2, 3};
 
@@ -146,7 +144,8 @@ int main() {
 
   glBindVertexArray(0);
 
-  while (!glfwWindowShouldClose(window)) {
+  while (!glfwWindowShouldClose(window))
+  {
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
@@ -162,7 +161,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // ImGui UI
-    if (showUI) {
+    if (showUI)
+    {
       ImGui::Begin("Material Controls");
       ImGui::RadioButton("Disable Mipmapping", &mode, 0);
 
@@ -183,13 +183,6 @@ int main() {
       ImGui::Separator();
       ImGui::SliderFloat("LOD bias", &lod, -3.0f, 3.0f, "%.2f");
 
-      // ImGui::Separator();
-      // ImGui::Text("Switch Textures.");
-
-      // ImGui::RadioButton("Chess Board", &textureIndex, 0);
-      // ImGui::RadioButton("UV Grid", &textureIndex, 1);
-      // ImGui::RadioButton("Line Grid", &textureIndex, 2);
-
       ImGui::Separator();
 
       ImGui::Text("Use WASD + Space/Shift to move, mouse to look around.");
@@ -208,7 +201,8 @@ int main() {
     shader.setMat4("view", view);
     shader.setVec3("cameraPos", camera.position);
 
-    switch (mode) {
+    switch (mode)
+    {
     case 0:
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       break;
@@ -236,8 +230,7 @@ int main() {
 
     glActiveTexture(GL_TEXTURE0);
 
-    unsigned int currentTex = textures[textureIndex];
-    glBindTexture(GL_TEXTURE_2D, currentTex);
+    glBindTexture(GL_TEXTURE_2D, chessTex);
 
     shader.setInt("tex", 0);
 
@@ -250,7 +243,8 @@ int main() {
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    if (showUI) {
+    if (showUI)
+    {
       ImGui::Render();
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }

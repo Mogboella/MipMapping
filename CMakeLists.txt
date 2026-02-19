@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lab3)
+project(lab4)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -10,7 +10,7 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-add_executable(lab3 
+add_executable(lab4 
   src/main.cpp 
   external/glad/src/glad.c
   external/imgui/imgui.cpp
@@ -21,7 +21,7 @@ add_executable(lab3
   external/imgui/imgui_impl_opengl3.cpp
 )
 
-target_include_directories(lab3 PRIVATE 
+target_include_directories(lab4 PRIVATE 
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/external/glad/include
   ${CMAKE_SOURCE_DIR}/external/imgui
@@ -33,5 +33,5 @@ include_directories(/opt/homebrew/opt/glfw/include)
 include_directories(${CMAKE_SOURCE_DIR}/external/glad/include)
 
 link_directories(/opt/homebrew/opt/glfw/lib)
-target_link_libraries(lab3 PRIVATE glfw assimp::assimp)
+target_link_libraries(lab4 PRIVATE glfw assimp::assimp)
 
